@@ -45,20 +45,25 @@ const Index = () => {
     }
   }, []);
 
+  console.log({ subscription, registration });
   const subscribeButtonOnClick = async (event) => {
-    event.preventDefault();
-    const sub = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: base64ToUint8Array(
-        process.env.NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY
-      ),
-    });
-    console.log(sub);
-    // TODO: you should call your API to save subscription data on server in order to send web push notification from server
-    setSubscription(sub);
-    setIsSubscribed(true);
-    console.log("web push subscribed!");
-    console.log(sub);
+    try {
+      event.preventDefault();
+      const sub = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: base64ToUint8Array(
+          process.env.NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY
+        ),
+      });
+
+      // TODO: you should call your API to save subscription data on server in order to send web push notification from server
+      setSubscription(sub);
+      setIsSubscribed(true);
+      console.log("web push subscribed!");
+      console.log(sub);
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const unsubscribeButtonOnClick = async (event) => {
